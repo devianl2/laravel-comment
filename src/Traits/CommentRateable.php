@@ -28,8 +28,20 @@ trait CommentRateable
     }
 
     /**
-     * @param bool $onlyApproved 
-     * @return int 
+     * @param int $commentId 
+     * @param array $data 
+     * @return Comment 
+     */
+    public function updateComment($commentId, $data)
+    {
+        $comment = $this->comments()->find($commentId);
+        $comment->update($data);
+        return $comment;
+    }
+
+    /**
+     * @param bool $onlyApproved
+     * @return int
      */
     public function countComments($onlyApproved = true)
     {
