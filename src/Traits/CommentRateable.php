@@ -18,7 +18,6 @@ trait CommentRateable
     /**
      * @param $data
      * @param $author
-     * @param $parent
      *
      * @return static
      */
@@ -28,9 +27,9 @@ trait CommentRateable
     }
 
     /**
-     * @param int $commentId 
-     * @param array $data 
-     * @return Comment 
+     * @param int $commentId
+     * @param array $data
+     * @return Comment
      */
     public function updateComment($commentId, $data)
     {
@@ -53,13 +52,14 @@ trait CommentRateable
     }
 
     /**
-     * @param int $roundDecimal
      * @param bool $onlyApproved
-     * @return int
+     * @param int|null $roundDecimal
+     * @return int|null
      */
-    public function averageRating($roundDecimal= null, $onlyApproved= true)
+    public function averageRating($onlyApproved= true, $roundDecimal= null)
     {
-        $conditions = $onlyApproved ? [['approved', '1']] : [];
+        $defaultRating = config('comment.enable_default_rating') ? config('comment.default_rating', 5) : null;
+        $conditions = $onlyApproved ? [['is_approved', 1]] : [];
         $avgExpression = null;
 
         if ($roundDecimal) {
@@ -68,12 +68,14 @@ trait CommentRateable
             $avgExpression = 'AVG(rating) as averageRating';
         }
 
-        return $this->comments()
+        $averageRating = $this->comments()
             ->selectRaw($avgExpression)
             ->where($conditions)
             ->get()
             ->first()
             ->averageRating;
+
+        return $averageRating ? $averageRating : $defaultRating;
     }
 
     /**
@@ -84,7 +86,7 @@ trait CommentRateable
      */
     public function getComments($onlyApproved = true, $paginate = false, $limit = 10)
     {
-        $conditions = $onlyApproved ? ['is_approved' => 1] : [];
+        $conditions = $onlyApproved ? [['is_approved', 1]] : [];
 
         $comments = $this->comments()->where($conditions);
 
@@ -99,11 +101,17 @@ trait CommentRateable
      */
     public function getRejectedComments($paginate = false, $limit = 10)
     {
-        $comments = $this->comments()->where(['is_approved' => 0]);
+        $comments = $this->comments()->where('is_approved', 0);
 
         return $this->getResults($comments, $paginate, $limit);
     }
 
+    /**
+     * @param mixed $comments 
+     * @param bool $paginate 
+     * @param int $limit 
+     * @return mixed 
+     */
     protected function getResults($comments, $paginate = false, $limit = 10)
     {
         if (!$paginate) {
