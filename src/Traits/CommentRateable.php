@@ -77,8 +77,8 @@ trait CommentRateable
             ->average_rating;
 
             return (object)[
-                'result' => $averageRating ? $averageRating : $defaultRating,
-                'max_index' => $maxRatingIndex,
+                'result' => (float)$averageRating ? $averageRating : $defaultRating,
+                'max_rate' => (float)$maxRatingIndex,
             ];
     }
 
