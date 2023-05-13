@@ -1,0 +1,42 @@
+{
+    "name": "devianl2/laravel-comment",
+    "description": "Laravel comment and rateable package",
+    "keywords": ["rating", "laravel", "review-rating", "comment", "rateable", "commentable"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Devian Leong",
+            "email": "devianleong@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "illuminate/database": "~7.0|^8.0|^9.0|^10.0",
+        "illuminate/support": "~7.0|^8.0|^9.0|^10.0",
+        "nesbot/carbon": "^2.42"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "^9.5",
+        "orchestra/testbench": "^7.0|^8.0",
+        "friendsofphp/php-cs-fixer": "^3.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Devianl2\\CommentRateable\\": "/src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Devianl2\\CommentRateable\\CommentRateableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test:windows": "vendor\\bin\\phpunit"
+    }
+}
