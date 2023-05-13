@@ -5,8 +5,6 @@ namespace Devianl2\CommentRateable\Traits;
 use Devianl2\CommentRateable\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-
 trait CommentRateable
 {
     /**
@@ -78,13 +76,10 @@ trait CommentRateable
             ->first()
             ->average_rating;
 
-            $collection = new Collection();
-            $collection->push((object)[
+            return (object)[
                 'result' => $averageRating ? $averageRating : $defaultRating,
                 'max_index' => $maxRatingIndex,
-            ]);
-
-            return $collection;
+            ];
     }
 
     /**
