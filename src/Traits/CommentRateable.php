@@ -4,6 +4,7 @@ namespace Devianl2\CommentRateable\Traits;
 
 use Devianl2\CommentRateable\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 trait CommentRateable
 {
@@ -76,6 +77,34 @@ trait CommentRateable
             ->averageRating;
 
         return $averageRating ? $averageRating : $defaultRating;
+    }
+
+    /**
+     * @return array 
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException 
+     * @throws \Psr\Container\NotFoundExceptionInterface 
+     * @throws \Psr\Container\ContainerExceptionInterface 
+     */
+    public function statistics()
+    {
+        $ratings = config('comment.ratings', []);
+        $totalRatings = 0;
+        $totalRatingsPerKey = [];
+
+        foreach ($ratings as $key => $value) {
+            $ratingCount = $this->comments()->where('rating', $key)->count();
+            $totalRatings += $ratingCount;
+            $totalRatingsPerKey[$key] = $ratingCount;
+        }
+
+        $statistics = Arr::map($totalRatingsPerKey, function ($value) use ($totalRatings) {
+            // return percentage of total ratings
+            return $totalRatings > 0 ? round(($value / $totalRatings) * 100) : 0;
+        });
+
+        ksort($statistics);
+
+        return $statistics;
     }
 
     /**
