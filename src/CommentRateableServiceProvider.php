@@ -17,6 +17,10 @@ class CommentRateableServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../database/migrations/create_comments_table.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_comments_table.php",
         ], 'migrations');
+
+        $this->publishes([
+            __DIR__.'/../config/comment.php' => config_path('comment.php'),
+        ], 'config');
     }
 
     /**
