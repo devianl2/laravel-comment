@@ -36,6 +36,18 @@ class Post extends Model
 
 ## Use Case
 
+### Save post
+```php
+$post = Post::first();
+$comment = $post->comment([
+    'title' => 'This is a test title',
+    'body' => 'And we will add some shit here',
+    'rating' => 5,
+    'approved' => true, // This is optional and defaults to false
+], $user);
+```
+
+### Other Methods
 1. Get average rating: Retrieve the average rating for a post.
 ```php
 $post = Post::first();
