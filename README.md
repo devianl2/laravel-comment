@@ -36,15 +36,28 @@ class Post extends Model
 
 ## Use Case
 
-### Save post
+### Save Comment
 ```php
 $post = Post::first();
 $comment = $post->comment([
     'title' => 'This is a test title',
     'body' => 'And we will add some shit here',
     'rating' => 5,
-    'approved' => true, // This is optional and defaults to false
+    'is_approved' => true, // This is optional and defaults to false
 ], $user);
+```
+
+### Update Comment
+```php
+$post = Post::first();
+$comment = $post->updateComment(
+    $commentId,
+    [
+        'title' => 'This is a test title',
+        'body' => 'And we will add some shit here',
+        'rating' => 5,
+        'is_approved' => true, // This is optional and defaults to false
+    ], $user);
 ```
 
 ### Other Methods
