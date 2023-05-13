@@ -2,7 +2,7 @@
 
 namespace Devianl2\CommentRateable\Traits;
 
-use \Devianl2\RateableComment\Models\Comment;
+use Devianl2\CommentRateable\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 
 trait CommentRateable
@@ -14,7 +14,6 @@ trait CommentRateable
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-
 
     /**
      * @param $data
@@ -43,8 +42,8 @@ trait CommentRateable
 
     /**
      * @param int $roundDecimal
-     * @param bool $onlyApproved 
-     * @return int 
+     * @param bool $onlyApproved
+     * @return int
      */
     public function averageRating($roundDecimal= null, $onlyApproved= true)
     {
@@ -66,10 +65,10 @@ trait CommentRateable
     }
 
     /**
-     * @param bool $onlyApproved 
-     * @param bool $paginate 
-     * @param int $limit 
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator 
+     * @param bool $onlyApproved
+     * @param bool $paginate
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function getComments($onlyApproved = true, $paginate = false, $limit = 10)
     {
@@ -81,10 +80,10 @@ trait CommentRateable
     }
 
     /**
-     * @param bool $onlyApproved 
-     * @param bool $paginate 
-     * @param int $limit 
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator 
+     * @param bool $onlyApproved
+     * @param bool $paginate
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function getRejectedComments($paginate = false, $limit = 10)
     {
