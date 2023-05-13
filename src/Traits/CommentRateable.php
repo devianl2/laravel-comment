@@ -62,11 +62,12 @@ trait CommentRateable
         $defaultRating = config('comment.enable_default_rating') ? config('comment.default_rating', 5) : null;
         $conditions = $onlyApproved ? [['is_approved', 1]] : [];
         $avgExpression = null;
+        $maxRatingIndex = array_key_last(config('comment.ratings', [])) ?? 0;
 
         if ($roundDecimal) {
-            $avgExpression = 'ROUND(AVG(rating), ' . (int)$roundDecimal . ') as averageRating';
+            $avgExpression = 'ROUND(AVG(rating), ' . (int)$roundDecimal . ') as average_rating';
         } else {
-            $avgExpression = 'AVG(rating) as averageRating';
+            $avgExpression = 'AVG(rating) as average_rating';
         }
 
         $averageRating = $this->comments()
@@ -74,9 +75,12 @@ trait CommentRateable
             ->where($conditions)
             ->get()
             ->first()
-            ->averageRating;
+            ->average_rating;
 
-        return $averageRating ? $averageRating : $defaultRating;
+        return [
+            'result' => $averageRating ? $averageRating : $defaultRating,
+            'max_index' => $maxRatingIndex,
+        ];
     }
 
     /**
@@ -97,11 +101,14 @@ trait CommentRateable
             $totalRatingsPerKey[$key] = $ratingCount;
         }
 
+        /**
+         * Array keys are rating values, array values are percentage of total ratings
+         */
         $statistics = Arr::map($totalRatingsPerKey, function ($value) use ($totalRatings) {
             // return percentage of total ratings
             return $totalRatings > 0 ? round(($value / $totalRatings) * 100) : 0;
         });
-
+        
         ksort($statistics);
 
         return $statistics;
